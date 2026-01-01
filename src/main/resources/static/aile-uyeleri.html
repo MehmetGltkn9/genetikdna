@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aile Üyeleri - Genetik DNA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem 0;
+        }
+        .container-main {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 2rem;
+        }
+        .btn-modern {
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+        }
+        .table-modern {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-modern thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-main">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-users me-2"></i>Aile Üyeleri</h2>
+                <div>
+                    <a href="index.html" class="btn btn-secondary btn-modern me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Ana Sayfa
+                    </a>
+                    <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fas fa-plus me-2"></i>Yeni Üye
+                    </button>
+                </div>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="table-responsive">
+                <table class="table table-modern table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Kullanıcı ID</th>
+                            <th>Ad Soyad</th>
+                            <th>İlişki Türü</th>
+                            <th>Doğum Yeri</th>
+                            <th>Vefat Tarihi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="uyeTableBody">
+                        <tr>
+                            <td colspan="7" class="text-center">Yükleniyor...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ekleme Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni Aile Üyesi Ekle</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addForm">
+                        <div class="mb-3">
+                            <label class="form-label">Kullanıcı ID</label>
+                            <input type="number" class="form-control" name="kullaniciId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ad Soyad</label>
+                            <input type="text" class="form-control" name="adSoyad" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">İlişki Türü</label>
+                            <select class="form-select" name="iliskiTuru" required>
+                                <option value="">Seçiniz</option>
+                                <option value="Baba">Baba</option>
+                                <option value="Anne">Anne</option>
+                                <option value="Kardeş">Kardeş</option>
+                                <option value="Amca">Amca</option>
+                                <option value="Teyze">Teyze</option>
+                                <option value="Dayı">Dayı</option>
+                                <option value="Hala">Hala</option>
+                                <option value="Dede">Dede</option>
+                                <option value="Nine">Nine</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Doğum Yeri</label>
+                            <input type="text" class="form-control" name="dogumYeri">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Vefat Tarihi</label>
+                            <input type="date" class="form-control" name="vefatTarihi">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" onclick="addUye()">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            setTimeout(() => alertContainer.innerHTML = '', 5000);
+        }
+
+        async function loadUyeler() {
+            try {
+                const response = await fetch(`${API_BASE}/aile-uyeleri`);
+                const data = await response.json();
+                
+                const tbody = document.getElementById('uyeTableBody');
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center">Henüz üye bulunmuyor.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.map(u => `
+                    <tr>
+                        <td>${u.id}</td>
+                        <td>${u.kullaniciId || '-'}</td>
+                        <td>${u.adSoyad || '-'}</td>
+                        <td>${u.iliskiTuru || '-'}</td>
+                        <td>${u.dogumYeri || '-'}</td>
+                        <td>${u.vefatTarihi || '-'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info me-1" onclick="viewKullaniciUyeleri(${u.kullaniciId})" title="Kullanıcı Üyeleri">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteUye(${u.id})" title="Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                showAlert('Üyeler yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function addUye() {
+            const form = document.getElementById('addForm');
+            const formData = new FormData(form);
+            
+            const data = {
+                kullaniciId: parseInt(formData.get('kullaniciId')),
+                adSoyad: formData.get('adSoyad'),
+                iliskiTuru: formData.get('iliskiTuru'),
+                dogumYeri: formData.get('dogumYeri') || null,
+                vefatTarihi: formData.get('vefatTarihi') || null
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/aile-uyeleri`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showAlert('Aile üyesi başarıyla eklendi!', 'success');
+                    form.reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addModal')).hide();
+                    loadUyeler();
+                } else {
+                    showAlert('Üye eklenirken hata oluştu!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function deleteUye(id) {
+            if (!confirm('Bu üyeyi silmek istediğinize emin misiniz?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/aile-uyeleri/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Üye başarıyla silindi!', 'success');
+                    loadUyeler();
+                } else {
+                    showAlert('Silme hatası!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function viewKullaniciUyeleri(kullaniciId) {
+            try {
+                const response = await fetch(`${API_BASE}/aile-uyeleri/kullanicilar/${kullaniciId}`);
+                const data = await response.json();
+                alert('Kullanıcı aile üyeleri:\n' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                showAlert('Üyeler yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        loadUyeler();
+    </script>
+</body>
+</html>
+

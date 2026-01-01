@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denetim Kayıtları - Genetik DNA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem 0;
+        }
+        .container-main {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 2rem;
+        }
+        .btn-modern {
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+        }
+        .table-modern {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-modern thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .badge-modern {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-main">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-clipboard-list me-2"></i>Denetim Kayıtları</h2>
+                <div>
+                    <a href="index.html" class="btn btn-secondary btn-modern me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Ana Sayfa
+                    </a>
+                    <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fas fa-plus me-2"></i>Yeni Kayıt
+                    </button>
+                </div>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="table-responsive">
+                <table class="table table-modern table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>İşlem Tarihi</th>
+                            <th>Kullanıcı ID</th>
+                            <th>Etkilenen Tablo</th>
+                            <th>Etkilenen ID</th>
+                            <th>İşlem Tipi</th>
+                            <th>Açıklama</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="kayitTableBody">
+                        <tr>
+                            <td colspan="8" class="text-center">Yükleniyor...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ekleme Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni Denetim Kaydı Ekle</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Kullanıcı ID</label>
+                                <input type="number" class="form-control" name="kullaniciId" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Etkilenen Tablo</label>
+                                <input type="text" class="form-control" name="etkilenenTablo" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Etkilenen ID</label>
+                                <input type="number" class="form-control" name="etkilenenId" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">İşlem Tipi</label>
+                                <select class="form-select" name="islemTipi" required>
+                                    <option value="">Seçiniz</option>
+                                    <option value="INSERT">INSERT</option>
+                                    <option value="UPDATE">UPDATE</option>
+                                    <option value="DELETE">DELETE</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Açıklama</label>
+                            <textarea class="form-control" name="aciklama" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" onclick="addKayit()">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            setTimeout(() => alertContainer.innerHTML = '', 5000);
+        }
+
+        function getIslemBadge(tip) {
+            const badges = {
+                'INSERT': 'success',
+                'UPDATE': 'warning',
+                'DELETE': 'danger'
+            };
+            return `<span class="badge bg-${badges[tip] || 'secondary'} badge-modern">${tip}</span>`;
+        }
+
+        async function loadKayitlar() {
+            try {
+                const response = await fetch(`${API_BASE}/denetim-kayitlari`);
+                const data = await response.json();
+                
+                const tbody = document.getElementById('kayitTableBody');
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="text-center">Henüz kayıt bulunmuyor.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.map(k => `
+                    <tr>
+                        <td>${k.id}</td>
+                        <td>${k.islemTarihi ? new Date(k.islemTarihi).toLocaleString('tr-TR') : '-'}</td>
+                        <td>${k.kullaniciId || '-'}</td>
+                        <td>${k.etkilenenTablo || '-'}</td>
+                        <td>${k.etkilenenId || '-'}</td>
+                        <td>${getIslemBadge(k.islemTipi || 'INSERT')}</td>
+                        <td>${k.aciklama ? (k.aciklama.length > 30 ? k.aciklama.substring(0, 30) + '...' : k.aciklama) : '-'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info me-1" onclick="viewKullaniciKayitlari(${k.kullaniciId})" title="Kullanıcı Kayıtları">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="btn btn-sm btn-primary me-1" onclick="viewTabloKayitlari('${k.etkilenenTablo}')" title="Tablo Kayıtları">
+                                <i class="fas fa-table"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteKayit(${k.id})" title="Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                showAlert('Kayıtlar yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function addKayit() {
+            const form = document.getElementById('addForm');
+            const formData = new FormData(form);
+            
+            const data = {
+                kullaniciId: parseInt(formData.get('kullaniciId')),
+                etkilenenTablo: formData.get('etkilenenTablo'),
+                etkilenenId: parseInt(formData.get('etkilenenId')),
+                islemTipi: formData.get('islemTipi'),
+                aciklama: formData.get('aciklama')
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/denetim-kayitlari`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showAlert('Denetim kaydı başarıyla eklendi!', 'success');
+                    form.reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addModal')).hide();
+                    loadKayitlar();
+                } else {
+                    showAlert('Kayıt eklenirken hata oluştu!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function deleteKayit(id) {
+            if (!confirm('Bu kaydı silmek istediğinize emin misiniz?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/denetim-kayitlari/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Kayıt başarıyla silindi!', 'success');
+                    loadKayitlar();
+                } else {
+                    showAlert('Silme hatası!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function viewKullaniciKayitlari(kullaniciId) {
+            try {
+                const response = await fetch(`${API_BASE}/denetim-kayitlari/kullanicilar/${kullaniciId}`);
+                const data = await response.json();
+                alert('Kullanıcı kayıtları:\n' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                showAlert('Kayıtlar yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function viewTabloKayitlari(tabloAdi) {
+            try {
+                const response = await fetch(`${API_BASE}/denetim-kayitlari/tablolar/${encodeURIComponent(tabloAdi)}`);
+                const data = await response.json();
+                alert('Tablo kayıtları:\n' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                showAlert('Kayıtlar yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        loadKayitlar();
+    </script>
+</body>
+</html>
+

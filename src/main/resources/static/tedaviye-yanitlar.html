@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tedaviye Yanıtlar - Genetik DNA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem 0;
+        }
+        .container-main {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 2rem;
+        }
+        .btn-modern {
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+        }
+        .table-modern {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-modern thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-main">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-pills me-2"></i>Tedaviye Yanıtlar</h2>
+                <div>
+                    <a href="index.html" class="btn btn-secondary btn-modern me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Ana Sayfa
+                    </a>
+                    <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fas fa-plus me-2"></i>Yeni Yanıt
+                    </button>
+                </div>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="table-responsive">
+                <table class="table table-modern table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Sonuç ID</th>
+                            <th>İlaç Adı</th>
+                            <th>Yanıt Tahmini</th>
+                            <th>Öneriler</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="yanitTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center">Yükleniyor...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ekleme Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni Tedaviye Yanıt Ekle</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addForm">
+                        <div class="mb-3">
+                            <label class="form-label">Sonuç ID</label>
+                            <input type="number" class="form-control" name="sonucId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">İlaç Adı</label>
+                            <input type="text" class="form-control" name="ilacAdi" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Yanıt Tahmini</label>
+                            <input type="text" class="form-control" name="yanitTahmini" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Öneriler</label>
+                            <textarea class="form-control" name="oneriler" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" onclick="addYanit()">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            setTimeout(() => alertContainer.innerHTML = '', 5000);
+        }
+
+        async function loadYanitlar() {
+            try {
+                const response = await fetch(`${API_BASE}/tedaviye-yanitlar`);
+                const data = await response.json();
+                
+                const tbody = document.getElementById('yanitTableBody');
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center">Henüz yanıt bulunmuyor.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.map(y => `
+                    <tr>
+                        <td>${y.id}</td>
+                        <td>${y.sonucId || '-'}</td>
+                        <td>${y.ilacAdi || '-'}</td>
+                        <td>${y.yanitTahmini || '-'}</td>
+                        <td>${y.oneriler ? (y.oneriler.length > 30 ? y.oneriler.substring(0, 30) + '...' : y.oneriler) : '-'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info me-1" onclick="viewSonucYanitlari(${y.sonucId})" title="Sonuç Yanıtları">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteYanit(${y.id})" title="Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                showAlert('Yanıtlar yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function addYanit() {
+            const form = document.getElementById('addForm');
+            const formData = new FormData(form);
+            
+            const data = {
+                sonucId: parseInt(formData.get('sonucId')),
+                ilacAdi: formData.get('ilacAdi'),
+                yanitTahmini: formData.get('yanitTahmini'),
+                oneriler: formData.get('oneriler')
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/tedaviye-yanitlar`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showAlert('Tedaviye yanıt başarıyla eklendi!', 'success');
+                    form.reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addModal')).hide();
+                    loadYanitlar();
+                } else {
+                    showAlert('Yanıt eklenirken hata oluştu!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function deleteYanit(id) {
+            if (!confirm('Bu yanıtı silmek istediğinize emin misiniz?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/tedaviye-yanitlar/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Yanıt başarıyla silindi!', 'success');
+                    loadYanitlar();
+                } else {
+                    showAlert('Silme hatası!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function viewSonucYanitlari(sonucId) {
+            try {
+                const response = await fetch(`${API_BASE}/tedaviye-yanitlar/sonuclar/${sonucId}`);
+                const data = await response.json();
+                alert('Sonuç yanıtları:\n' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                showAlert('Yanıtlar yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        loadYanitlar();
+    </script>
+</body>
+</html>
+

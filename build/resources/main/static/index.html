@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genetik DNA - API Yönetim Paneli</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            padding: 2rem 0;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 1.5rem;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 1.5rem;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+        .btn-modern {
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-modern:hover {
+            transform: scale(1.05);
+        }
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .header-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 700;
+        }
+        .header-title h1 {
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header-title p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container main-container">
+        <div class="header-title">
+            <h1><i class="fas fa-dna"></i> Genetik DNA API</h1>
+            <p>API Yönetim ve Test Paneli</p>
+        </div>
+
+        <div class="row">
+            <!-- Kullanıcılar -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h5 class="mb-0">Kullanıcılar</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Kullanıcı yönetimi ve işlemleri</p>
+                        <a href="kullanicilar.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kullanıcı Hesapları -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <h5 class="mb-0">Kullanıcı Hesapları</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Hesap yönetimi</p>
+                        <a href="kullanici-hesaplari.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Adresler -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h5 class="mb-0">Adresler</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Adres yönetimi</p>
+                        <a href="adresler.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Paketleri -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <h5 class="mb-0">Test Paketleri</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Test paketi yönetimi</p>
+                        <a href="test-paketleri.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Siparişleri -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h5 class="mb-0">Test Siparişleri</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Sipariş yönetimi</p>
+                        <a href="test-siparisleri.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Numuneler -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h5 class="mb-0">Numuneler</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Numune yönetimi</p>
+                        <a href="numuneler.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laboratuvar Analizleri -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <h5 class="mb-0">Laboratuvar Analizleri</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Analiz yönetimi</p>
+                        <a href="laboratuvar-analizleri.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Genetik Test Sonuçları -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <h5 class="mb-0">Genetik Test Sonuçları</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Test sonuç yönetimi</p>
+                        <a href="genetik-test-sonuclari.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hastalık Risk Skorları -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h5 class="mb-0">Hastalık Risk Skorları</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Risk skoru yönetimi</p>
+                        <a href="hastalik-risk-skorlari.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kullanıcı Genetik Verileri -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h5 class="mb-0">Kullanıcı Genetik Verileri</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Genetik veri yönetimi</p>
+                        <a href="kullanici-genetik-verileri.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Genetik Varyantlar -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <h5 class="mb-0">Genetik Varyantlar</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Varyant yönetimi</p>
+                        <a href="genetik-varyantlar.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kullanıcı Varyant Sonuçları -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <h5 class="mb-0">Kullanıcı Varyant Sonuçları</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Varyant sonuç yönetimi</p>
+                        <a href="kullanici-varyant-sonuclari.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hastalık Tanımları -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-notes-medical"></i>
+                        </div>
+                        <h5 class="mb-0">Hastalık Tanımları</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Hastalık tanım yönetimi</p>
+                        <a href="hastalik-tanimlari.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tedaviye Yanıtlar -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <h5 class="mb-0">Tedaviye Yanıtlar</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Tedavi yanıt yönetimi</p>
+                        <a href="tedaviye-yanitlar.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Etnik Köken Raporları -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h5 class="mb-0">Etnik Köken Raporları</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Etnik köken rapor yönetimi</p>
+                        <a href="etnik-koken-raporlari.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Genetik Danışmanlık -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h5 class="mb-0">Genetik Danışmanlık</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Danışmanlık yönetimi</p>
+                        <a href="genetik-danismanlik.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aile Üyeleri -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h5 class="mb-0">Aile Üyeleri</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Aile üyesi yönetimi</p>
+                        <a href="aile-uyeleri.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soy Ağacı Bağlantıları -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <h5 class="mb-0">Soy Ağacı Bağlantıları</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Soy ağacı bağlantı yönetimi</p>
+                        <a href="soyagaci-baglantilari.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Veri Erişim İzinleri -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h5 class="mb-0">Veri Erişim İzinleri</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">İzin yönetimi</p>
+                        <a href="veri-erisim-izinleri.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Denetim Kayıtları -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h5 class="mb-0">Denetim Kayıtları</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Denetim kayıt yönetimi</p>
+                        <a href="denetim-kayitlari.html" class="btn btn-primary btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Yönet
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Raporlama -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="icon-box bg-white bg-opacity-25">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h5 class="mb-0">Raporlama (Fonksiyon)</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Detaylı raporlama fonksiyonları</p>
+                        <a href="raporlama.html" class="btn btn-success btn-modern w-100">
+                            <i class="fas fa-arrow-right me-2"></i>Raporlar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

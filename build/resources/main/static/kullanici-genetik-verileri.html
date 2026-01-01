@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Genetik Verileri - Genetik DNA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem 0;
+        }
+        .container-main {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 2rem;
+        }
+        .btn-modern {
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+        }
+        .table-modern {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-modern thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-main">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-dna me-2"></i>Kullanıcı Genetik Verileri</h2>
+                <div>
+                    <a href="index.html" class="btn btn-secondary btn-modern me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Ana Sayfa
+                    </a>
+                    <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fas fa-plus me-2"></i>Yeni Veri
+                    </button>
+                </div>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="table-responsive">
+                <table class="table table-modern table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Sonuç ID</th>
+                            <th>Ham Veri Yolu</th>
+                            <th>Dosya Boyutu (MB)</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="veriTableBody">
+                        <tr>
+                            <td colspan="5" class="text-center">Yükleniyor...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ekleme Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni Genetik Veri Ekle</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addForm">
+                        <div class="mb-3">
+                            <label class="form-label">Sonuç ID</label>
+                            <input type="number" class="form-control" name="sonucId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ham Veri Depolama Yolu</label>
+                            <input type="text" class="form-control" name="hamVeriDepolamaYolu" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Dosya Boyutu (MB)</label>
+                            <input type="number" class="form-control" name="dosyaBoyutuMb" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" onclick="addVeri()">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            setTimeout(() => alertContainer.innerHTML = '', 5000);
+        }
+
+        async function loadVeriler() {
+            try {
+                const response = await fetch(`${API_BASE}/kullanici-genetik-verileri`);
+                const data = await response.json();
+                
+                const tbody = document.getElementById('veriTableBody');
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center">Henüz veri bulunmuyor.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.map(v => `
+                    <tr>
+                        <td>${v.id}</td>
+                        <td>${v.sonucId || '-'}</td>
+                        <td>${v.hamVeriDepolamaYolu ? (v.hamVeriDepolamaYolu.length > 40 ? v.hamVeriDepolamaYolu.substring(0, 40) + '...' : v.hamVeriDepolamaYolu) : '-'}</td>
+                        <td>${v.dosyaBoyutuMb || '-'} MB</td>
+                        <td>
+                            <button class="btn btn-sm btn-info me-1" onclick="viewSonucVerileri(${v.sonucId})" title="Sonuç Verileri">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteVeri(${v.id})" title="Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                showAlert('Veriler yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function addVeri() {
+            const form = document.getElementById('addForm');
+            const formData = new FormData(form);
+            
+            const data = {
+                sonucId: parseInt(formData.get('sonucId')),
+                hamVeriDepolamaYolu: formData.get('hamVeriDepolamaYolu'),
+                dosyaBoyutuMb: parseInt(formData.get('dosyaBoyutuMb'))
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/kullanici-genetik-verileri`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showAlert('Genetik veri başarıyla eklendi!', 'success');
+                    form.reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addModal')).hide();
+                    loadVeriler();
+                } else {
+                    showAlert('Veri eklenirken hata oluştu!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function deleteVeri(id) {
+            if (!confirm('Bu veriyi silmek istediğinize emin misiniz?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/kullanici-genetik-verileri/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Veri başarıyla silindi!', 'success');
+                    loadVeriler();
+                } else {
+                    showAlert('Silme hatası!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function viewSonucVerileri(sonucId) {
+            try {
+                const response = await fetch(`${API_BASE}/kullanici-genetik-verileri/sonuclar/${sonucId}`);
+                const data = await response.json();
+                alert('Sonuç verileri:\n' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                showAlert('Veriler yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        loadVeriler();
+    </script>
+</body>
+</html>
+

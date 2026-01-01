@@ -1,0 +1,1077 @@
+{
+	"info": {
+		"_postman_id": "genetikdna-complete-api",
+		"name": "Genetik DNA - Complete API Collection",
+		"description": "Tüm controller'lar için kapsamlı API endpoint'leri",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Kullanıcılar",
+			"item": [
+				{
+					"name": "Kullanıcı Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ad\": \"Mehmet\",\n  \"soyad\": \"Demir\",\n  \"dogumTarihi\": \"1985-03-20\",\n  \"cinsiyet\": \"Erkek\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/kullanicilar", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanicilar"]}
+					}
+				},
+				{
+					"name": "Tüm Kullanıcıları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanicilar", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanicilar"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Detayları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanicilar/1/detaylar", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanicilar", "1", "detaylar"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "Kullanıcı ve Hesap Ekle (SP)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ad\": \"Mehmet\",\n  \"soyad\": \"Demir\",\n  \"dogumTarihi\": \"1985-03-20\",\n  \"cinsiyet\": \"Erkek\",\n  \"eposta\": \"mehmet.demir@example.com\",\n  \"parolaHash\": \"hashed_password_123\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/kullanicilar/kullanici-ve-hesap", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanicilar", "kullanici-ve-hesap"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Güncelle (SP)",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ad\": \"Mehmet\",\n  \"soyad\": \"Demir\",\n  \"dogumTarihi\": \"1985-03-20\",\n  \"cinsiyet\": \"Erkek\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/kullanicilar/1/guncelle?kullaniciId=1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanicilar", "1", "guncelle"], "query": [{"key": "kullaniciId", "value": "1"}]}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Kullanıcı Hesapları",
+			"item": [
+				{
+					"name": "Hesap Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"eposta\": \"mehmet@example.com\",\n  \"parolaHash\": \"hashed_password\",\n  \"aktifMi\": true\n}"
+						},
+						"url": {"raw": "http://localhost:8080/kullanici-hesaplari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-hesaplari"]}
+					}
+				},
+				{
+					"name": "Tüm Hesapları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-hesaplari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-hesaplari"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Hesapları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-hesaplari/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-hesaplari", "kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "Hesap Getir (E-posta)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-hesaplari/eposta/mehmet@example.com", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-hesaplari", "eposta", "mehmet@example.com"]}
+					}
+				},
+				{
+					"name": "Hesap Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-hesaplari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-hesaplari", "1"]}
+					}
+				},
+				{
+					"name": "Hesap Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/kullanici-hesaplari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-hesaplari", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Adresler",
+			"item": [
+				{
+					"name": "Adres Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"adresTipi\": \"Fatura\",\n  \"ulke\": \"Türkiye\",\n  \"sehir\": \"İstanbul\",\n  \"postaKodu\": \"34000\",\n  \"detayliAdres\": \"Atatürk Cad. No:123 Daire:5\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/adresler", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["adresler"]}
+					}
+				},
+				{
+					"name": "Tüm Adresleri Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/adresler", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["adresler"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Adresleri",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/adresler/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["adresler", "kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "Adres Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/adresler/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["adresler", "1"]}
+					}
+				},
+				{
+					"name": "Adres Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/adresler/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["adresler", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Test Paketleri",
+			"item": [
+				{
+					"name": "Test Paketi Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"paketAdi\": \"Temel Genetik Test Paketi\",\n  \"fiyat\": 1500.00,\n  \"icerikAciklamasi\": \"Temel genetik analiz ve raporlama\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/test-paketleri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-paketleri"]}
+					}
+				},
+				{
+					"name": "Tüm Paketleri Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/test-paketleri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-paketleri"]}
+					}
+				},
+				{
+					"name": "Paket Siparişleri",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/test-paketleri/1/siparisler", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-paketleri", "1", "siparisler"]}
+					}
+				},
+				{
+					"name": "Paket Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/test-paketleri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-paketleri", "1"]}
+					}
+				},
+				{
+					"name": "Paket Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/test-paketleri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-paketleri", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Test Siparişleri",
+			"item": [
+				{
+					"name": "Test Siparişi Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"paketId\": 1,\n  \"toplamTutar\": 2000.00,\n  \"odemeDurumu\": \"Beklemede\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/test-siparisleri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-siparisleri"]}
+					}
+				},
+				{
+					"name": "Tüm Siparişleri Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/test-siparisleri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-siparisleri"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Siparişleri",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/test-siparisleri/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-siparisleri", "kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "Sipariş Detayları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/test-siparisleri/1/detaylar", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-siparisleri", "1", "detaylar"]}
+					}
+				},
+				{
+					"name": "Sipariş Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/test-siparisleri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-siparisleri", "1"]}
+					}
+				},
+				{
+					"name": "Sipariş Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/test-siparisleri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-siparisleri", "1"]}
+					}
+				},
+				{
+					"name": "Sipariş ve Numune Ekle (SP)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"paketId\": 1,\n  \"toplamTutar\": 2000.00,\n  \"barkodId\": \"NUM-2024-001\",\n  \"numuneTipi\": \"Tükürük\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/test-siparisleri/siparis-ve-numune", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-siparisleri", "siparis-ve-numune"]}
+					}
+				},
+				{
+					"name": "Sipariş Ödeme (SP)",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"odemeDurumu\": \"Ödendi\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/test-siparisleri/1/odeme", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["test-siparisleri", "1", "odeme"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Numuneler",
+			"item": [
+				{
+					"name": "Numune Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"siparisId\": 1,\n  \"barkodId\": \"NUM-2024-001\",\n  \"numuneTipi\": \"Tükürük\",\n  \"durum\": \"Beklemede\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/numuneler", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["numuneler"]}
+					}
+				},
+				{
+					"name": "Tüm Numuneleri Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/numuneler", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["numuneler"]}
+					}
+				},
+				{
+					"name": "Sipariş Numuneleri",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/numuneler/siparisler/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["numuneler", "siparisler", "1"]}
+					}
+				},
+				{
+					"name": "Numune Analizleri",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/numuneler/1/analizler", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["numuneler", "1", "analizler"]}
+					}
+				},
+				{
+					"name": "Numune Getir (Barkod)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/numuneler/barkod/NUM-2024-001", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["numuneler", "barkod", "NUM-2024-001"]}
+					}
+				},
+				{
+					"name": "Numune Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/numuneler/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["numuneler", "1"]}
+					}
+				},
+				{
+					"name": "Numune Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/numuneler/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["numuneler", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Laboratuvar Analizleri",
+			"item": [
+				{
+					"name": "Analiz Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"numuneId\": 1,\n  \"teknisyenAdi\": \"Dr. Ayşe Yılmaz\",\n  \"kaliteKontrolSonucu\": \"Başarılı\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/laboratuvar-analizleri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["laboratuvar-analizleri"]}
+					}
+				},
+				{
+					"name": "Tüm Analizleri Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/laboratuvar-analizleri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["laboratuvar-analizleri"]}
+					}
+				},
+				{
+					"name": "Numune Analizleri",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/laboratuvar-analizleri/numuneler/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["laboratuvar-analizleri", "numuneler", "1"]}
+					}
+				},
+				{
+					"name": "Teknisyen Analizleri",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/laboratuvar-analizleri/teknisyenler/Dr. Ayşe Yılmaz", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["laboratuvar-analizleri", "teknisyenler", "Dr. Ayşe Yılmaz"]}
+					}
+				},
+				{
+					"name": "Analiz Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/laboratuvar-analizleri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["laboratuvar-analizleri", "1"]}
+					}
+				},
+				{
+					"name": "Analiz Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/laboratuvar-analizleri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["laboratuvar-analizleri", "1"]}
+					}
+				},
+				{
+					"name": "Analiz Tamamla (SP)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"numuneId\": 1,\n  \"analizBitis\": \"2024-01-15 14:30:00\",\n  \"kaliteKontrolSonucu\": \"Başarılı\",\n  \"kullaniciId\": 1,\n  \"veriSurumu\": \"v1.0\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/laboratuvar-analizleri/tamamla", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["laboratuvar-analizleri", "tamamla"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "8. Genetik Test Sonuçları",
+			"item": [
+				{
+					"name": "Test Sonucu Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"analizId\": 1,\n  \"veriSurumu\": \"v1.0\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/genetik-test-sonuclari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-test-sonuclari"]}
+					}
+				},
+				{
+					"name": "Tüm Sonuçları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-test-sonuclari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-test-sonuclari"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Sonuçları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-test-sonuclari/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-test-sonuclari", "kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "Analiz Sonuçları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-test-sonuclari/analizler/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-test-sonuclari", "analizler", "1"]}
+					}
+				},
+				{
+					"name": "Sonuç Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-test-sonuclari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-test-sonuclari", "1"]}
+					}
+				},
+				{
+					"name": "Sonuç Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/genetik-test-sonuclari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-test-sonuclari", "1"]}
+					}
+				},
+				{
+					"name": "Test Sonucu ve Veri Ekle (SP)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"analizId\": 1,\n  \"veriSurumu\": \"v1.0\",\n  \"hamVeriYolu\": \"/data/genetik/ham_veri_001.vcf\",\n  \"dosyaBoyutuMb\": 250\n}"
+						},
+						"url": {"raw": "http://localhost:8080/genetik-test-sonuclari/test-sonucu-ve-veri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-test-sonuclari", "test-sonucu-ve-veri"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "9. Kullanıcı Genetik Verileri",
+			"item": [
+				{
+					"name": "Genetik Veri Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sonucId\": 1,\n  \"hamVeriDepolamaYolu\": \"/data/genetik/ham_veri_001.vcf\",\n  \"dosyaBoyutuMb\": 250\n}"
+						},
+						"url": {"raw": "http://localhost:8080/kullanici-genetik-verileri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-genetik-verileri"]}
+					}
+				},
+				{
+					"name": "Tüm Verileri Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-genetik-verileri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-genetik-verileri"]}
+					}
+				},
+				{
+					"name": "Sonuç Verileri",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-genetik-verileri/sonuclar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-genetik-verileri", "sonuclar", "1"]}
+					}
+				},
+				{
+					"name": "Veri Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-genetik-verileri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-genetik-verileri", "1"]}
+					}
+				},
+				{
+					"name": "Veri Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/kullanici-genetik-verileri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-genetik-verileri", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "10. Genetik Varyantlar",
+			"item": [
+				{
+					"name": "Varyant Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"rsId\": \"rs123456\",\n  \"kromozom\": \"1\",\n  \"pozisyon\": 123456,\n  \"referansAlel\": \"A\",\n  \"alternatifAlel\": \"G\",\n  \"genAdi\": \"BRCA1\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/genetik-varyantlar", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-varyantlar"]}
+					}
+				},
+				{
+					"name": "Tüm Varyantları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-varyantlar", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-varyantlar"]}
+					}
+				},
+				{
+					"name": "Kromozom Varyantları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-varyantlar/kromozomlar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-varyantlar", "kromozomlar", "1"]}
+					}
+				},
+				{
+					"name": "Varyant Getir (RS ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-varyantlar/rs-id/rs123456", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-varyantlar", "rs-id", "rs123456"]}
+					}
+				},
+				{
+					"name": "Varyant Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-varyantlar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-varyantlar", "1"]}
+					}
+				},
+				{
+					"name": "Varyant Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/genetik-varyantlar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-varyantlar", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "11. Kullanıcı Varyant Sonuçları",
+			"item": [
+				{
+					"name": "Varyant Sonucu Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sonucId\": 1,\n  \"varyantId\": 1,\n  \"tespitEdilenAlel\": \"A\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/kullanici-varyant-sonuclari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-varyant-sonuclari"]}
+					}
+				},
+				{
+					"name": "Tüm Sonuçları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-varyant-sonuclari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-varyant-sonuclari"]}
+					}
+				},
+				{
+					"name": "Sonuç Varyantları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-varyant-sonuclari/sonuclar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-varyant-sonuclari", "sonuclar", "1"]}
+					}
+				},
+				{
+					"name": "Varyant Sonuçları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-varyant-sonuclari/varyantlar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-varyant-sonuclari", "varyantlar", "1"]}
+					}
+				},
+				{
+					"name": "Sonuç Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/kullanici-varyant-sonuclari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-varyant-sonuclari", "1"]}
+					}
+				},
+				{
+					"name": "Sonuç Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/kullanici-varyant-sonuclari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-varyant-sonuclari", "1"]}
+					}
+				},
+				{
+					"name": "Toplu Varyant Ekle (SP)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sonucId\": 1,\n  \"varyantVerileri\": \"[{\\\"varyant_id\\\":1,\\\"alel\\\":\\\"A\\\"},{\\\"varyant_id\\\":2,\\\"alel\\\":\\\"G\\\"},{\\\"varyant_id\\\":3,\\\"alel\\\":\\\"T\\\"}]\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/kullanici-varyant-sonuclari/toplu-ekle", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["kullanici-varyant-sonuclari", "toplu-ekle"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "12. Hastalık Tanımları",
+			"item": [
+				{
+					"name": "Hastalık Tanımı Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hastalikAdi\": \"Tip 2 Diyabet\",\n  \"icdKodu\": \"E11\",\n  \"aciklama\": \"Tip 2 diyabet hastalığı tanımı\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/hastalik-tanimlari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-tanimlari"]}
+					}
+				},
+				{
+					"name": "Tüm Tanımları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/hastalik-tanimlari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-tanimlari"]}
+					}
+				},
+				{
+					"name": "Hastalık Getir (ICD Kodu)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/hastalik-tanimlari/icd-kodu/E11", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-tanimlari", "icd-kodu", "E11"]}
+					}
+				},
+				{
+					"name": "Hastalık Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/hastalik-tanimlari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-tanimlari", "1"]}
+					}
+				},
+				{
+					"name": "Hastalık Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/hastalik-tanimlari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-tanimlari", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "13. Hastalık Risk Skorları",
+			"item": [
+				{
+					"name": "Risk Skoru Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sonucId\": 1,\n  \"hastalikId\": 1,\n  \"riskYuzdesi\": 15.5,\n  \"riskSeviyesi\": \"Orta\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/hastalik-risk-skorlari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-risk-skorlari"]}
+					}
+				},
+				{
+					"name": "Tüm Skorları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/hastalik-risk-skorlari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-risk-skorlari"]}
+					}
+				},
+				{
+					"name": "Sonuç Risk Skorları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/hastalik-risk-skorlari/sonuclar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-risk-skorlari", "sonuclar", "1"]}
+					}
+				},
+				{
+					"name": "Hastalık Risk Skorları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/hastalik-risk-skorlari/hastaliklar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-risk-skorlari", "hastaliklar", "1"]}
+					}
+				},
+				{
+					"name": "Risk Skoru Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/hastalik-risk-skorlari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-risk-skorlari", "1"]}
+					}
+				},
+				{
+					"name": "Risk Skoru Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/hastalik-risk-skorlari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-risk-skorlari", "1"]}
+					}
+				},
+				{
+					"name": "Risk ve Tedavi Ekle (SP)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sonucId\": 1,\n  \"hastalikId\": 1,\n  \"riskYuzdesi\": 15.5,\n  \"riskSeviyesi\": \"Orta\",\n  \"ilacAdi\": \"Metformin\",\n  \"yanitTahmini\": \"İyi\",\n  \"oneriler\": \"Düzenli egzersiz ve sağlıklı beslenme önerilir.\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/hastalik-risk-skorlari/risk-ve-tedavi", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["hastalik-risk-skorlari", "risk-ve-tedavi"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "14. Tedaviye Yanıtlar",
+			"item": [
+				{
+					"name": "Tedaviye Yanıt Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sonucId\": 1,\n  \"ilacAdi\": \"Metformin\",\n  \"yanitTahmini\": \"İyi\",\n  \"oneriler\": \"Düzenli egzersiz önerilir.\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/tedaviye-yanitlar", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["tedaviye-yanitlar"]}
+					}
+				},
+				{
+					"name": "Tüm Yanıtları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/tedaviye-yanitlar", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["tedaviye-yanitlar"]}
+					}
+				},
+				{
+					"name": "Sonuç Yanıtları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/tedaviye-yanitlar/sonuclar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["tedaviye-yanitlar", "sonuclar", "1"]}
+					}
+				},
+				{
+					"name": "Yanıt Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/tedaviye-yanitlar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["tedaviye-yanitlar", "1"]}
+					}
+				},
+				{
+					"name": "Yanıt Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/tedaviye-yanitlar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["tedaviye-yanitlar", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "15. Etnik Köken Raporları",
+			"item": [
+				{
+					"name": "Rapor Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sonucId\": 1,\n  \"etnikKoken\": \"Türk\",\n  \"yuzde\": 85.5\n}"
+						},
+						"url": {"raw": "http://localhost:8080/etnik-koken-raporlari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["etnik-koken-raporlari"]}
+					}
+				},
+				{
+					"name": "Tüm Raporları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/etnik-koken-raporlari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["etnik-koken-raporlari"]}
+					}
+				},
+				{
+					"name": "Sonuç Raporları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/etnik-koken-raporlari/sonuclar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["etnik-koken-raporlari", "sonuclar", "1"]}
+					}
+				},
+				{
+					"name": "Rapor Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/etnik-koken-raporlari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["etnik-koken-raporlari", "1"]}
+					}
+				},
+				{
+					"name": "Rapor Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/etnik-koken-raporlari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["etnik-koken-raporlari", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "16. Genetik Danışmanlık",
+			"item": [
+				{
+					"name": "Danışmanlık Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"danismanlikTarihi\": \"2024-01-15\",\n  \"danismanlikTipi\": \"Genetik Test Sonuçları\",\n  \"notlar\": \"Test sonuçları hakkında danışmanlık verildi.\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/genetik-danismanlik", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-danismanlik"]}
+					}
+				},
+				{
+					"name": "Tüm Danışmanlıkları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-danismanlik", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-danismanlik"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Danışmanlıkları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-danismanlik/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-danismanlik", "kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "Danışmanlık Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/genetik-danismanlik/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-danismanlik", "1"]}
+					}
+				},
+				{
+					"name": "Danışmanlık Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/genetik-danismanlik/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["genetik-danismanlik", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "17. Aile Üyeleri",
+			"item": [
+				{
+					"name": "Aile Üyesi Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"akrabalikDerecesi\": \"Baba\",\n  \"ad\": \"Ali\",\n  \"soyad\": \"Demir\",\n  \"dogumTarihi\": \"1960-05-15\",\n  \"cinsiyet\": \"Erkek\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/aile-uyeleri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["aile-uyeleri"]}
+					}
+				},
+				{
+					"name": "Tüm Üyeleri Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/aile-uyeleri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["aile-uyeleri"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Aile Üyeleri",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/aile-uyeleri/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["aile-uyeleri", "kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "Üye Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/aile-uyeleri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["aile-uyeleri", "1"]}
+					}
+				},
+				{
+					"name": "Üye Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/aile-uyeleri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["aile-uyeleri", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "18. Soy Ağacı Bağlantıları",
+			"item": [
+				{
+					"name": "Bağlantı Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"bagliKullaniciId\": 2,\n  \"akrabalikDerecesi\": \"Kardeş\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/soyagaci-baglantilari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["soyagaci-baglantilari"]}
+					}
+				},
+				{
+					"name": "Tüm Bağlantıları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/soyagaci-baglantilari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["soyagaci-baglantilari"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Bağlantıları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/soyagaci-baglantilari/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["soyagaci-baglantilari", "kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "Bağlantı Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/soyagaci-baglantilari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["soyagaci-baglantilari", "1"]}
+					}
+				},
+				{
+					"name": "Bağlantı Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/soyagaci-baglantilari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["soyagaci-baglantilari", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "19. Veri Erişim İzinleri",
+			"item": [
+				{
+					"name": "İzin Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"izinVerilenKullaniciId\": 2,\n  \"izinTipi\": \"Okuma\",\n  \"gecerlilikTarihi\": \"2025-12-31\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/veri-erisim-izinleri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["veri-erisim-izinleri"]}
+					}
+				},
+				{
+					"name": "Tüm İzinleri Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/veri-erisim-izinleri", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["veri-erisim-izinleri"]}
+					}
+				},
+				{
+					"name": "Kullanıcı İzinleri",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/veri-erisim-izinleri/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["veri-erisim-izinleri", "kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "İzin Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/veri-erisim-izinleri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["veri-erisim-izinleri", "1"]}
+					}
+				},
+				{
+					"name": "İzin Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/veri-erisim-izinleri/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["veri-erisim-izinleri", "1"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "20. Denetim Kayıtları",
+			"item": [
+				{
+					"name": "Denetim Kaydı Ekle",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kullaniciId\": 1,\n  \"etkilenenTablo\": \"kullanici\",\n  \"etkilenenId\": 1,\n  \"islemTipi\": \"INSERT\",\n  \"aciklama\": \"Yeni kullanıcı eklendi\"\n}"
+						},
+						"url": {"raw": "http://localhost:8080/denetim-kayitlari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["denetim-kayitlari"]}
+					}
+				},
+				{
+					"name": "Tüm Kayıtları Getir",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/denetim-kayitlari", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["denetim-kayitlari"]}
+					}
+				},
+				{
+					"name": "Kullanıcı Kayıtları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/denetim-kayitlari/kullanicilar/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["denetim-kayitlari", "kullanicilar", "1"]}
+					}
+				},
+				{
+					"name": "Tablo Kayıtları",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/denetim-kayitlari/tablolar/kullanici", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["denetim-kayitlari", "tablolar", "kullanici"]}
+					}
+				},
+				{
+					"name": "Kayıt Getir (ID)",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "http://localhost:8080/denetim-kayitlari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["denetim-kayitlari", "1"]}
+					}
+				},
+				{
+					"name": "Kayıt Sil",
+					"request": {
+						"method": "DELETE",
+						"url": {"raw": "http://localhost:8080/denetim-kayitlari/1", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["denetim-kayitlari", "1"]}
+					}
+				}
+			]
+		}
+	]
+}
+

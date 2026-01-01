@@ -1,0 +1,251 @@
+{
+	"info": {
+		"_postman_id": "genetikdna-stored-procedures",
+		"name": "Genetik DNA - Stored Procedures",
+		"description": "Genetik DNA projesi için stored procedure endpoint'leri",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Kullanıcı ve Hesap Ekleme",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ad\": \"Mehmet\",\n  \"soyad\": \"Demir\",\n  \"dogumTarihi\": \"1985-03-20\",\n  \"cinsiyet\": \"Erkek\",\n  \"eposta\": \"mehmet.demir@example.com\",\n  \"parolaHash\": \"hashed_password_123\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/kullanicilar/kullanici-ve-hesap",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"kullanicilar",
+						"kullanici-ve-hesap"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Kullanıcı Güncelleme",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ad\": \"Mehmet\",\n  \"soyad\": \"Demir\",\n  \"dogumTarihi\": \"1985-03-20\",\n  \"cinsiyet\": \"Erkek\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/kullanicilar/1/guncelle?kullaniciId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"kullanicilar",
+						"1",
+						"guncelle"
+					],
+					"query": [
+						{
+							"key": "kullaniciId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Test Siparişi ve Numune Ekleme",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"kullaniciId\": 1,\n  \"paketId\": 1,\n  \"toplamTutar\": 2000.00,\n  \"barkodId\": \"NUM-2024-001\",\n  \"numuneTipi\": \"Tükürük\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/test-siparisleri/siparis-ve-numune",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"test-siparisleri",
+						"siparis-ve-numune"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Test Siparişi Ödeme",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"odemeDurumu\": \"Ödendi\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/test-siparisleri/1/odeme",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"test-siparisleri",
+						"1",
+						"odeme"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Genetik Test Sonucu ve Veri Ekleme",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"kullaniciId\": 1,\n  \"analizId\": 1,\n  \"veriSurumu\": \"v1.0\",\n  \"hamVeriYolu\": \"/data/genetik/ham_veri_001.vcf\",\n  \"dosyaBoyutuMb\": 250\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/genetik-test-sonuclari/test-sonucu-ve-veri",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"genetik-test-sonuclari",
+						"test-sonucu-ve-veri"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. Laboratuvar Analizi Tamamlama",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"numuneId\": 1,\n  \"analizBitis\": \"2024-01-15 14:30:00\",\n  \"kaliteKontrolSonucu\": \"Başarılı\",\n  \"kullaniciId\": 1,\n  \"veriSurumu\": \"v1.0\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/laboratuvar-analizleri/tamamla",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"laboratuvar-analizleri",
+						"tamamla"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. Hastalık Risk ve Tedavi Ekleme",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sonucId\": 1,\n  \"hastalikId\": 1,\n  \"riskYuzdesi\": 15.5,\n  \"riskSeviyesi\": \"Orta\",\n  \"ilacAdi\": \"Metformin\",\n  \"yanitTahmini\": \"İyi\",\n  \"oneriler\": \"Düzenli egzersiz ve sağlıklı beslenme önerilir.\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/hastalik-risk-skorlari/risk-ve-tedavi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hastalik-risk-skorlari",
+						"risk-ve-tedavi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8. Varyant Sonuçlarını Toplu Ekleme",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sonucId\": 1,\n  \"varyantVerileri\": \"[{\\\"varyant_id\\\":1,\\\"alel\\\":\\\"A\\\"},{\\\"varyant_id\\\":2,\\\"alel\\\":\\\"G\\\"},{\\\"varyant_id\\\":3,\\\"alel\\\":\\\"T\\\"}]\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/kullanici-varyant-sonuclari/toplu-ekle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"kullanici-varyant-sonuclari",
+						"toplu-ekle"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
+

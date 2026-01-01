@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Hesapları - Genetik DNA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem 0;
+        }
+        .container-main {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 2rem;
+        }
+        .btn-modern {
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+        }
+        .table-modern {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-modern thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .badge-modern {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-main">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-user-circle me-2"></i>Kullanıcı Hesapları</h2>
+                <div>
+                    <a href="index.html" class="btn btn-secondary btn-modern me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Ana Sayfa
+                    </a>
+                    <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fas fa-plus me-2"></i>Yeni Hesap
+                    </button>
+                </div>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="table-responsive">
+                <table class="table table-modern table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Kullanıcı ID</th>
+                            <th>E-posta</th>
+                            <th>Son Giriş</th>
+                            <th>Aktif</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hesapTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center">Yükleniyor...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ekleme Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni Hesap Ekle</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addForm">
+                        <div class="mb-3">
+                            <label class="form-label">Kullanıcı ID</label>
+                            <input type="number" class="form-control" name="kullaniciId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">E-posta</label>
+                            <input type="email" class="form-control" name="eposta" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Parola Hash</label>
+                            <input type="text" class="form-control" name="parolaHash" required>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="aktifMi" id="aktifMi" checked>
+                                <label class="form-check-label" for="aktifMi">Aktif</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" onclick="addHesap()">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            setTimeout(() => alertContainer.innerHTML = '', 5000);
+        }
+
+        async function loadHesaplar() {
+            try {
+                const response = await fetch(`${API_BASE}/kullanici-hesaplari`);
+                const data = await response.json();
+                
+                const tbody = document.getElementById('hesapTableBody');
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center">Henüz hesap bulunmuyor.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.map(h => `
+                    <tr>
+                        <td>${h.id}</td>
+                        <td>${h.kullaniciId || '-'}</td>
+                        <td>${h.eposta || '-'}</td>
+                        <td>${h.sonGiris ? new Date(h.sonGiris).toLocaleString('tr-TR') : '-'}</td>
+                        <td>${h.aktifMi ? '<span class="badge bg-success badge-modern">Aktif</span>' : '<span class="badge bg-danger badge-modern">Pasif</span>'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info me-1" onclick="viewKullaniciHesaplari(${h.kullaniciId})" title="Kullanıcı Hesapları">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning me-1" onclick="searchByEmail('${h.eposta}')" title="E-posta ile Ara">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteHesap(${h.id})" title="Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                showAlert('Hesaplar yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function addHesap() {
+            const form = document.getElementById('addForm');
+            const formData = new FormData(form);
+            
+            const data = {
+                kullaniciId: parseInt(formData.get('kullaniciId')),
+                eposta: formData.get('eposta'),
+                parolaHash: formData.get('parolaHash'),
+                aktifMi: document.getElementById('aktifMi').checked
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/kullanici-hesaplari`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showAlert('Hesap başarıyla eklendi!', 'success');
+                    form.reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addModal')).hide();
+                    loadHesaplar();
+                } else {
+                    showAlert('Hesap eklenirken hata oluştu!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function deleteHesap(id) {
+            if (!confirm('Bu hesabı silmek istediğinize emin misiniz?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/kullanici-hesaplari/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Hesap başarıyla silindi!', 'success');
+                    loadHesaplar();
+                } else {
+                    showAlert('Silme hatası!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function viewKullaniciHesaplari(kullaniciId) {
+            try {
+                const response = await fetch(`${API_BASE}/kullanici-hesaplari/kullanicilar/${kullaniciId}`);
+                const data = await response.json();
+                alert('Kullanıcı hesapları:\n' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                showAlert('Hesaplar yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function searchByEmail(eposta) {
+            try {
+                const response = await fetch(`${API_BASE}/kullanici-hesaplari/eposta/${encodeURIComponent(eposta)}`);
+                const data = await response.json();
+                alert('Hesap bilgileri:\n' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                showAlert('Hesap bulunamadı: ' + error.message, 'danger');
+            }
+        }
+
+        loadHesaplar();
+    </script>
+</body>
+</html>
+

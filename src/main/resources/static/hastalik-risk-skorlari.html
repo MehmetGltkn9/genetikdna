@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hastalık Risk Skorları - Genetik DNA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem 0;
+        }
+        .container-main {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 2rem;
+        }
+        .btn-modern {
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+        }
+        .table-modern {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table-modern thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .badge-modern {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container-main">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-chart-line me-2"></i>Hastalık Risk Skorları</h2>
+                <div>
+                    <a href="index.html" class="btn btn-secondary btn-modern me-2">
+                        <i class="fas fa-arrow-left me-2"></i>Ana Sayfa
+                    </a>
+                    <button class="btn btn-primary btn-modern" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fas fa-plus me-2"></i>Yeni Risk Skoru
+                    </button>
+                    <button class="btn btn-success btn-modern" data-bs-toggle="modal" data-bs-target="#addWithTedaviModal">
+                        <i class="fas fa-pills me-2"></i>Risk + Tedavi (SP)
+                    </button>
+                </div>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="table-responsive">
+                <table class="table table-modern table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Sonuç ID</th>
+                            <th>Hastalık ID</th>
+                            <th>Risk Yüzdesi</th>
+                            <th>Risk Seviyesi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="riskTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center">Yükleniyor...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ekleme Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Yeni Risk Skoru Ekle</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addForm">
+                        <div class="mb-3">
+                            <label class="form-label">Sonuç ID</label>
+                            <input type="number" class="form-control" name="sonucId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Hastalık ID</label>
+                            <input type="number" class="form-control" name="hastalikId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Risk Yüzdesi</label>
+                            <input type="number" step="0.01" class="form-control" name="riskYuzdesi" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Risk Seviyesi</label>
+                            <select class="form-select" name="riskSeviyesi" required>
+                                <option value="">Seçiniz</option>
+                                <option value="Düşük">Düşük</option>
+                                <option value="Orta">Orta</option>
+                                <option value="Yüksek">Yüksek</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" onclick="addRisk()">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Risk + Tedavi Ekleme Modal (Stored Procedure) -->
+    <div class="modal fade" id="addWithTedaviModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Risk + Tedavi Ekle (Stored Procedure)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addWithTedaviForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Sonuç ID</label>
+                                <input type="number" class="form-control" name="sonucId" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Hastalık ID</label>
+                                <input type="number" class="form-control" name="hastalikId" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Risk Yüzdesi</label>
+                                <input type="number" step="0.01" class="form-control" name="riskYuzdesi" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Risk Seviyesi</label>
+                                <select class="form-select" name="riskSeviyesi" required>
+                                    <option value="">Seçiniz</option>
+                                    <option value="Düşük">Düşük</option>
+                                    <option value="Orta">Orta</option>
+                                    <option value="Yüksek">Yüksek</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">İlaç Adı</label>
+                            <input type="text" class="form-control" name="ilacAdi" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Yanıt Tahmini</label>
+                            <input type="text" class="form-control" name="yanitTahmini" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Öneriler</label>
+                            <textarea class="form-control" name="oneriler" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-success" onclick="addRiskWithTedavi()">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            setTimeout(() => alertContainer.innerHTML = '', 5000);
+        }
+
+        function getRiskBadge(seviye) {
+            const badges = {
+                'Yüksek': 'danger',
+                'Orta': 'warning',
+                'Düşük': 'success'
+            };
+            return `<span class="badge bg-${badges[seviye] || 'secondary'} badge-modern">${seviye}</span>`;
+        }
+
+        async function loadRiskSkorlari() {
+            try {
+                const response = await fetch(`${API_BASE}/hastalik-risk-skorlari`);
+                const data = await response.json();
+                
+                const tbody = document.getElementById('riskTableBody');
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center">Henüz risk skoru bulunmuyor.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.map(r => `
+                    <tr>
+                        <td>${r.id}</td>
+                        <td>${r.sonucId || '-'}</td>
+                        <td>${r.hastalikId || '-'}</td>
+                        <td>${r.riskYuzdesi ? r.riskYuzdesi.toFixed(2) + '%' : '-'}</td>
+                        <td>${getRiskBadge(r.riskSeviyesi || 'Orta')}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info me-1" onclick="viewSonucRiskleri(${r.sonucId})" title="Sonuç Riskleri">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="btn btn-sm btn-primary me-1" onclick="viewHastalikRiskleri(${r.hastalikId})" title="Hastalık Riskleri">
+                                <i class="fas fa-chart-bar"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteRisk(${r.id})" title="Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                showAlert('Risk skorları yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function addRisk() {
+            const form = document.getElementById('addForm');
+            const formData = new FormData(form);
+            
+            const data = {
+                sonucId: parseInt(formData.get('sonucId')),
+                hastalikId: parseInt(formData.get('hastalikId')),
+                riskYuzdesi: parseFloat(formData.get('riskYuzdesi')),
+                riskSeviyesi: formData.get('riskSeviyesi')
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/hastalik-risk-skorlari`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showAlert('Risk skoru başarıyla eklendi!', 'success');
+                    form.reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addModal')).hide();
+                    loadRiskSkorlari();
+                } else {
+                    showAlert('Risk skoru eklenirken hata oluştu!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function addRiskWithTedavi() {
+            const form = document.getElementById('addWithTedaviForm');
+            const formData = new FormData(form);
+            
+            const data = {
+                sonucId: parseInt(formData.get('sonucId')),
+                hastalikId: parseInt(formData.get('hastalikId')),
+                riskYuzdesi: parseFloat(formData.get('riskYuzdesi')),
+                riskSeviyesi: formData.get('riskSeviyesi'),
+                ilacAdi: formData.get('ilacAdi'),
+                yanitTahmini: formData.get('yanitTahmini'),
+                oneriler: formData.get('oneriler')
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/hastalik-risk-skorlari/risk-ve-tedavi`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    showAlert(`Risk skoru ve tedavi başarıyla eklendi! Risk ID: ${result.risk_id}, Tedavi ID: ${result.tedavi_id}`, 'success');
+                    form.reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addWithTedaviModal')).hide();
+                    loadRiskSkorlari();
+                } else {
+                    showAlert('Hata: ' + (result.message || 'Bilinmeyen hata'), 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function deleteRisk(id) {
+            if (!confirm('Bu risk skorunu silmek istediğinize emin misiniz?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/hastalik-risk-skorlari/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Risk skoru başarıyla silindi!', 'success');
+                    loadRiskSkorlari();
+                } else {
+                    showAlert('Silme hatası!', 'danger');
+                }
+            } catch (error) {
+                showAlert('Hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function viewSonucRiskleri(sonucId) {
+            try {
+                const response = await fetch(`${API_BASE}/hastalik-risk-skorlari/sonuclar/${sonucId}`);
+                const data = await response.json();
+                alert('Sonuç risk skorları:\n' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                showAlert('Risk skorları yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        async function viewHastalikRiskleri(hastalikId) {
+            try {
+                const response = await fetch(`${API_BASE}/hastalik-risk-skorlari/hastaliklar/${hastalikId}`);
+                const data = await response.json();
+                alert('Hastalık risk skorları:\n' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                showAlert('Risk skorları yüklenirken hata: ' + error.message, 'danger');
+            }
+        }
+
+        loadRiskSkorlari();
+    </script>
+</body>
+</html>
+
